@@ -3,7 +3,6 @@
 echo "Espera o POSTGRESQL inicializar e insere as variáveis de ambiente"
 postgres_ready() {
 python3 << END
-from config.envs import *
 import sys
 import psycopg2
 import os

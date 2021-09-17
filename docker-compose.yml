@@ -10,8 +10,6 @@ services:
       - POSTGRES_DB=bycoders-db
       - POSTGRES_USER=bycoders
       - POSTGRES_PASSWORD=bycoders
-    networks:
-      - backend
     ports:
       - "5434:5432"
 

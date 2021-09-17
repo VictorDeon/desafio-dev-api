@@ -1,11 +1,10 @@
 Django==3.2
 djangorestframework==3.12.4
-djangorestframework-simplejwt==4.6.0
+djangorestframework-simplejwt==4.4.0
 django-cors-headers==3.7.0
 flake8==3.9.1
 gunicorn==20.1.0
 psycopg2==2.8.6
 psycopg2-binary==2.8.6
 python-decouple==3.4
-ipython==7.23.0
 drf-spectacular==0.16.0
