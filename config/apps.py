@@ -1,7 +1,12 @@
 # Application definition
-DJANGO_APPS = ['django.contrib.auth']
+DJANGO_APPS = [
+    'django.contrib.auth',
+    'django.contrib.contenttypes'
+]
 
-PROJECT_APPS = []
+PROJECT_APPS = [
+    'apps.accounts'
+]
 
 EXTERNAL_APPS = [
     'corsheaders',

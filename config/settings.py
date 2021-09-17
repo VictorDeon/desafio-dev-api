@@ -1,11 +1,11 @@
 # flake8: noqa
-from .envs import *
 from .apps import INSTALLED_APPS
 from .databases import DATABASES
 from .middleware import MIDDLEWARE
 from .password import AUTH_PASSWORD_VALIDATORS
 from .templates import TEMPLATES
-from .internationalization import *
+from .secrets import *
+from .lang import *
 from .rest import *
 from .files import *
 from decouple import config
