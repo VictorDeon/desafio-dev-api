@@ -38,8 +38,6 @@ class ListUsersTestCase(APITestCase):
             email='fulano03@gmail.com',
             password='django1234'
         )
-        self.user3.deleted = True
-        self.user3.save()
 
         self.url = reverse('user-list')
 
@@ -57,7 +55,6 @@ class ListUsersTestCase(APITestCase):
         """
 
         self.assertEqual(User.objects.count(), 4)
-        self.assertEqual(User.objects.count(), 3)
 
     def test_list_all_not_deleted_users(self):
         """
@@ -67,17 +64,7 @@ class ListUsersTestCase(APITestCase):
         self.client.force_authenticate(self.superuser)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(User.objects.count(), 3)
-
-    def test_list_all_deleted_users(self):
-        """
-        Lista todos os usuários que foram deletados do sistema.
-        """
-
-        self.client.force_authenticate(self.superuser)
-        response = self.client.get(f"{self.url}?deleted=True")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 1)
+        self.assertEqual(User.objects.count(), 4)
 
     def test_filter_user_by_email(self):
         """
@@ -88,16 +75,6 @@ class ListUsersTestCase(APITestCase):
         response = self.client.get(f"{self.url}?email=fulano02@gmail.com")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 1)
-
-    def test_not_filter_user_deleted(self):
-        """
-        Não pode filtrar usuário que já foram deletados
-        """
-
-        self.client.force_authenticate(self.superuser)
-        response = self.client.get(f"{self.url}?email=fulano03@gmail.com")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['count'], 0)
 
     def test_not_logged_user_list_users(self):
         """

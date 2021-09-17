@@ -48,10 +48,6 @@ class UserViewSet(ModelViewSet):
 
         if self.action == 'list' or self.action == 'create':
             return serializers.UserRegisterSerializer
-        elif self.action == 'forget_password':
-            return serializers.ForgetPasswordSerializer
-        elif self.action == 'change_password':
-            return serializers.ChangePasswordSerializer
         else:
             return serializers.UserSerializer
 

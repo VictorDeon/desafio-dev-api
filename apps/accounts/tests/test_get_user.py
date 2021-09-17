@@ -38,8 +38,6 @@ class GetUserTestCase(APITestCase):
             email='fulano03@gmail.com',
             password='django1234'
         )
-        self.user3.deleted = True
-        self.user3.save()
 
     def tearDown(self):
         """
@@ -113,13 +111,3 @@ class GetUserTestCase(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(response.data.get('detail'), "Usuário não autenticado!")
-
-    def test_get_deleted_user_data_by_admin(self):
-        """
-        Pega os dados de um usuário deletado.
-        """
-
-        url = reverse('user-detail', kwargs={'pk': self.user3.pk})
-        self.client.force_authenticate(self.superuser)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)

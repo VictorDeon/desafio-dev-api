@@ -38,8 +38,6 @@ class EditUserTestCase(APITestCase):
             email='fulano03@gmail.com',
             password='django1234'
         )
-        self.user3.deleted = True
-        self.user3.save()
 
     def tearDown(self):
         """
@@ -58,8 +56,7 @@ class EditUserTestCase(APITestCase):
 
         data = {
             "name": 'Fulano Admin autalizado',
-            "email": 'fulano-admin-updated@gmail.com',
-            "deleted": True
+            "email": 'fulano-admin-updated@gmail.com'
         }
 
         self.client.force_authenticate(self.superuser)
@@ -68,7 +65,6 @@ class EditUserTestCase(APITestCase):
         self.superuser.refresh_from_db()
         self.assertEqual(self.superuser.name, data['name'])
         self.assertEqual(self.superuser.email, data['email'])
-        self.assertEqual(self.superuser.deleted, data['deleted'])
 
     def test_update_own_data_by_normal_user(self):
         """
@@ -79,8 +75,7 @@ class EditUserTestCase(APITestCase):
 
         data = {
             "name": 'Fulano autalizado',
-            "email": 'fulano-updated@gmail.com',
-            "deleted": True
+            "email": 'fulano-updated@gmail.com'
         }
 
         self.client.force_authenticate(self.user1)
@@ -89,7 +84,6 @@ class EditUserTestCase(APITestCase):
         self.user1.refresh_from_db()
         self.assertEqual(self.user1.name, data['name'])
         self.assertEqual(self.user1.email, data['email'])
-        self.assertEqual(self.user1.deleted, data['deleted'])
 
     def test_admin_update_normal_user_data(self):
         """
@@ -100,8 +94,7 @@ class EditUserTestCase(APITestCase):
 
         data = {
             "name": 'Fulano atualizado',
-            "email": 'fulano-updated@gmail.com',
-            "deleted": True
+            "email": 'fulano-updated@gmail.com'
         }
 
         self.client.force_authenticate(self.superuser)
@@ -110,7 +103,6 @@ class EditUserTestCase(APITestCase):
         self.user1.refresh_from_db()
         self.assertEqual(self.user1.name, data['name'])
         self.assertEqual(self.user1.email, data['email'])
-        self.assertEqual(self.user1.deleted, data['deleted'])
 
     def test_not_normal_user_update_another_normal_user_data(self):
         """
@@ -121,8 +113,7 @@ class EditUserTestCase(APITestCase):
 
         data = {
             "name": 'Fulano atualizado',
-            "email": 'fulano-updated@gmail.com',
-            "deleted": True
+            "email": 'fulano-updated@gmail.com'
         }
 
         self.client.force_authenticate(self.user2)
@@ -132,7 +123,6 @@ class EditUserTestCase(APITestCase):
         self.user1.refresh_from_db()
         self.assertEqual(self.user1.name, "Fulano 01")
         self.assertEqual(self.user1.email, "fulano01@gmail.com")
-        self.assertEqual(self.user1.deleted, False)
 
     def test_not_update_empty_name(self):
         """
@@ -143,8 +133,7 @@ class EditUserTestCase(APITestCase):
 
         data = {
             "name": '',
-            "email": 'fulano-updated@gmail.com',
-            "deleted": True
+            "email": 'fulano-updated@gmail.com'
         }
 
         self.client.force_authenticate(self.user1)
@@ -163,8 +152,7 @@ class EditUserTestCase(APITestCase):
 
         data = {
             "name": 'Fulano atualizado',
-            "email": '',
-            "deleted": True
+            "email": ''
         }
 
         self.client.force_authenticate(self.user1)
@@ -183,8 +171,7 @@ class EditUserTestCase(APITestCase):
 
         data = {
             "name": 'Fulano atualizado',
-            "email": 'fulano03@gmail.com',
-            "deleted": True
+            "email": 'fulano03@gmail.com'
         }
 
         self.client.force_authenticate(self.user1)
@@ -212,4 +199,3 @@ class EditUserTestCase(APITestCase):
         self.user1.refresh_from_db()
         self.assertEqual(self.user1.name, data['name'])
         self.assertEqual(self.user1.email, data['email'])
-        self.assertEqual(self.user1.deleted, False)

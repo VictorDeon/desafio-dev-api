@@ -1,13 +1,11 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers, status
-from drf_spectacular.utils import extend_schema_serializer
 from .user_serializer import UserSerializer
 from shared.exception import GenericException
 
 User = get_user_model()
 
 
-@extend_schema_serializer(exclude_fields=["deleted"])
 class UserRegisterSerializer(UserSerializer):
     """
     Dados de autenticação do usuário.

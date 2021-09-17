@@ -59,6 +59,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     # É uma lista de campos necessários para todos os usuários,
     REQUIRED_FIELDS = ['name']
 
+    objects = UserManager()
+
     def __str__(self):
         """
         Representação da modelo como string.
