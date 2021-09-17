@@ -1,0 +1,39 @@
+version: "3"
+services:
+  postgres:
+    image: postgres
+    container_name: bycoders_postgres
+    volumes:
+      - .ignore/postgres:/var/lib/postgresql/data
+      - .ignore/backup:/backup
+    environment:
+      - POSTGRES_DB=bycoders-db
+      - POSTGRES_USER=bycoders
+      - POSTGRES_PASSWORD=bycoders
+    networks:
+      - backend
+    ports:
+      - "5434:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: livre_pgadmin
+    ports:
+      - "5433:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=dev@example.com
+      - PGADMIN_DEFAULT_PASSWORD=bycoders
+
+  web:
+    build: .
+    image: bycoders/api:latest
+    container_name: bycoders-api
+    volumes:
+      - .:/software
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    restart: on-failure
+    depends_on:
+      - postgres
