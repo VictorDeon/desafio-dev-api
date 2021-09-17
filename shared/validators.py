@@ -25,6 +25,6 @@ class RegexValidator:
 
         if not pattern:
             if self.message:
-                raise LivreException(self.message, status_code=status.HTTP_400_BAD_REQUEST)
+                raise GenericException(self.message, status_code=status.HTTP_400_BAD_REQUEST)
             else:
-                raise LivreException(f"{value} não está no formato correto.", status_code=status.HTTP_400_BAD_REQUEST)
+                raise GenericException(f"{value} não está no formato correto.", status_code=status.HTTP_400_BAD_REQUEST)

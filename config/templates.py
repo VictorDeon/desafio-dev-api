@@ -1,5 +1,4 @@
 from pathlib import Path
-import os
 
 # Crie caminhos dentro do projeto como este: /config/files.py
 BASE_DIR = Path(__file__).resolve().parent.parent
