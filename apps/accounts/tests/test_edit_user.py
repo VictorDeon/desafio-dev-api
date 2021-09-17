@@ -46,7 +46,7 @@ class EditUserTestCase(APITestCase):
         Executado após cada teste.
         """
 
-        User.raw_objects.all().delete()
+        User.objects.all().delete()
         self.client.logout()
 
     def test_update_own_data_by_admin(self):

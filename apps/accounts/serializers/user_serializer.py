@@ -37,7 +37,7 @@ class UserSerializer(serializers.Serializer):
         },
         validators=[
             UniqueValidator(
-                queryset=User.raw_objects.all(),
+                queryset=User.objects.all(),
                 message="Já existe um usuário com esse email"
             ),
             RegexValidator(

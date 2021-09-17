@@ -31,12 +31,7 @@ class UserViewSet(ModelViewSet):
         """
 
         email = self.request.query_params.get('email', None)
-        deleted = self.request.query_params.get('deleted', None)
-
-        if deleted:
-            queryset = User.raw_objects.filter(deleted=True)
-        else:
-            queryset = User.objects.all()
+        queryset = User.objects.all()
 
         if email:
             queryset = queryset.filter(email__icontains=email)
@@ -69,8 +64,6 @@ class UserViewSet(ModelViewSet):
             permission_classes = (CreateListUserPermission,)
         elif self.action == 'current_user':
             permission_classes = (IsAuthenticated,)
-        elif self.action == 'forget_password' or self.action == 'change_password':
-            permission_classes = ()
         else:
             permission_classes = (UpdateOwnProfile,)
 

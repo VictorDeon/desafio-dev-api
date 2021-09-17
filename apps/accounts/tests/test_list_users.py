@@ -48,7 +48,7 @@ class ListUsersTestCase(APITestCase):
         Executado após cada teste.
         """
 
-        User.raw_objects.all().delete()
+        User.objects.all().delete()
         self.client.logout()
 
     def test_list_all_users(self):
@@ -56,7 +56,7 @@ class ListUsersTestCase(APITestCase):
         Lista todos os usuários do sistema.
         """
 
-        self.assertEqual(User.raw_objects.count(), 4)
+        self.assertEqual(User.objects.count(), 4)
         self.assertEqual(User.objects.count(), 3)
 
     def test_list_all_not_deleted_users(self):

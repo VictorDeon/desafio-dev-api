@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers, status
 from drf_spectacular.utils import extend_schema_serializer
 from .user_serializer import UserSerializer
-from shared.exception import LivreException
+from shared.exception import GenericException
 
 User = get_user_model()
 
@@ -39,7 +39,7 @@ class UserRegisterSerializer(UserSerializer):
         """
 
         if attributes.get('password') != attributes.get('confirm_password'):
-            raise LivreException("As senhas não combinam.", status_code=status.HTTP_400_BAD_REQUEST)
+            raise GenericException("As senhas não combinam.", status_code=status.HTTP_400_BAD_REQUEST)
 
         return attributes
 

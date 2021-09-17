@@ -41,7 +41,7 @@ class CreateUserTestCase(APITestCase):
         Executado após cada teste.
         """
 
-        User.raw_objects.all().delete()
+        User.objects.all().delete()
         self.client.logout()
 
     def test_create_user_by_superuser(self):

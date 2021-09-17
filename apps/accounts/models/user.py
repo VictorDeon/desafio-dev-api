@@ -1,9 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
-from shared.models import BaseModel, BaseManager
 
 
-class UserManager(BaseUserManager, BaseManager):
+class UserManager(models.Manager):
     """
     Gerenciamento de objetos da classe.
     """
@@ -39,7 +38,7 @@ class UserManager(BaseUserManager, BaseManager):
         return user
 
 
-class User(BaseModel, AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     """
     Modelo de usuário para autorização e autenticação.
     """
@@ -49,6 +48,10 @@ class User(BaseModel, AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
 
     is_staff = models.BooleanField(default=False)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
 
     # O campo que será usado para autenticação
     USERNAME_FIELD = 'email'

@@ -1,7 +1,7 @@
 from rest_framework.permissions import BasePermission
 from rest_framework.views import status
 from shared.permissions import is_admin, is_logged, is_owner
-from shared.exception import LivreException
+from shared.exception import GenericException
 
 
 class UpdateOwnProfile(BasePermission):
@@ -15,13 +15,13 @@ class UpdateOwnProfile(BasePermission):
         """
 
         if not is_logged(request):
-            raise LivreException("Usuário não autenticado!", status_code=status.HTTP_401_UNAUTHORIZED)
+            raise GenericException("Usuário não autenticado!", status_code=status.HTTP_401_UNAUTHORIZED)
 
         if is_admin(request):
             return True
 
         if not is_owner(request, obj):
-            raise LivreException("Usuário não tem autorização para realizar essa ação!", status_code=status.HTTP_401_UNAUTHORIZED)
+            raise GenericException("Usuário não tem autorização para realizar essa ação!", status_code=status.HTTP_401_UNAUTHORIZED)
 
         return True
 
@@ -40,4 +40,4 @@ class CreateListUserPermission(BasePermission):
         if is_logged(request) and is_admin(request):
             return True
 
-        raise LivreException("Usuário não tem autorização para realizar essa ação!", status_code=status.HTTP_401_UNAUTHORIZED)
+        raise GenericException("Usuário não tem autorização para realizar essa ação!", status_code=status.HTTP_401_UNAUTHORIZED)

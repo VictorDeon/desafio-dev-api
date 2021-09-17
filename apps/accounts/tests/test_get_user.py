@@ -46,7 +46,7 @@ class GetUserTestCase(APITestCase):
         Executado após cada teste.
         """
 
-        User.raw_objects.all().delete()
+        User.objects.all().delete()
         self.client.logout()
 
     def test_get_you_own_data_by_admin_user(self):
