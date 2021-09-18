@@ -7,7 +7,8 @@ DJANGO_APPS = [
 ]
 
 PROJECT_APPS = [
-    'apps.accounts'
+    'apps.accounts',
+    'apps.cnab'
 ]
 
 EXTERNAL_APPS = [
