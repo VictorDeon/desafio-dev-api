@@ -15,6 +15,6 @@ class RetrieveLoggedPermission(BasePermission):
         """
 
         if not is_logged(request):
-            raise GenericException("Usuário não autenticado!", status_code=status.HTTP_401_UNAUTHORIZED)
+            raise GenericException("Usuário precisa esta autenticado para realizar essa ação!", status_code=status.HTTP_401_UNAUTHORIZED)
 
         return True

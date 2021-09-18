@@ -7,7 +7,7 @@ class CNAB(models.Model):
     Modelo de CNAB
     """
 
-    cpf = models.CharField(max_length=11, unique=True)
+    cpf = models.CharField(max_length=14)
 
     owner = models.CharField(max_length=14)
 

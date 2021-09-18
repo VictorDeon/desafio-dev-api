@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.views import status
 from rest_framework.response import Response
 from shared.exception import GenericException
+from .models import CNAB
 from .permissions import RetrieveLoggedPermission
 from .enum import TransactionType, TransactionSignal
 
@@ -13,17 +14,17 @@ class CNABViewSet(ViewSet):
     """
 
     permission_classes = (RetrieveLoggedPermission,)
-    path = "./apps/cnab/CNAB.txt"
 
-    def __open_file(self):
+    def __open_file(self, data):
         """
         Abre o arquivo de forma async.
         """
 
         lines = []
-        with open(self.path, "r") as f:
-            for line in f.readlines():
-                lines.append(line)
+        for line in data['file'].readlines():
+            lines.append(line.decode())
+
+        data['file'].close()
 
         return lines
 
@@ -58,15 +59,17 @@ class CNABViewSet(ViewSet):
             "store": line[62:].strip().replace("\n", "")
         }
 
+        CNAB.objects.create(**result)
+
         return result
 
-    @action(detail=False, methods=['get'], url_path="cnab", url_name="cnab")
-    def cnab(self, request):
+    @action(detail=False, methods=['post'], url_path="cnab", url_name="upload")
+    def cnab(self, request, *args, **kwargs):
         """
         Extrai os dados do CNAB e armazena no banco
         """
 
-        lines = self.__open_file()
+        lines = self.__open_file(request.data)
 
         results = []
         for line in lines:
