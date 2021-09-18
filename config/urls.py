@@ -9,8 +9,8 @@ from .overrides import (
 
 
 urlpatterns = [
+    path('', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('schema/', ExcludedSpectacularYAMLAPIView.as_view(), name='schema'),
-    path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('auth/', TokenView.as_view(), name='token_obtain_pair'),
     path('auth/refresh/', AccessTokenRefreshView.as_view(), name='token_refresh'),
     path('users/', include('apps.accounts.urls'))
