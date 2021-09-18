@@ -16,12 +16,6 @@ class GetUserTestCase(APITestCase):
         Roda antes de cada método.
         """
 
-        self.superuser = User.objects.create_superuser(
-            name='Fulano Admin',
-            email='fulano-admin@gmail.com',
-            password='django1234'
-        )
-
         self.user = User.objects.create_user(
             name='Fulano',
             email='fulano@gmail.com',
@@ -48,12 +42,13 @@ class GetUserTestCase(APITestCase):
         """
 
         url = reverse('cnab-upload')
-        self.client.force_authenticate(self.superuser)
+        self.client.force_authenticate(self.user)
         self.assertEqual(CNAB.objects.count(), 0)
         self.assertEqual(Store.objects.count(), 0)
         response = self.client.post(url, data={ "file": self.cnab }, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['success'])
+        self.assertEqual(Store.objects.last().user, self.user)
         self.assertEqual(Store.objects.count(), len(response.data['results']))
         self.assertEqual(CNAB.objects.count(), 21)
 

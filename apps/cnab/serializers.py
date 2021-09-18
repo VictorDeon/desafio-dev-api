@@ -117,7 +117,11 @@ class StoreSerializer(serializers.Serializer):
 
         store, created = Store.objects.get_or_create(
             title=validated_data['store'],
-            defaults={ "cpf": validated_data['cpf'], "owner": validated_data['owner'] }
+            defaults={
+                "user": self.context.get('user'),
+                "cpf": validated_data['cpf'],
+                "owner": validated_data['owner']
+            }
         )
 
         CNAB.objects.create(

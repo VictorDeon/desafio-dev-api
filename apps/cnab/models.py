@@ -1,11 +1,18 @@
 from django.db import models
 from .enum import TransactionType
+from apps.accounts.models import User
 
 
 class Store(models.Model):
     """
     Modelo da loja.
     """
+
+    user = models.ForeignKey(
+        User,
+        related_name="stores",
+        on_delete=models.CASCADE
+    )
 
     title = models.CharField(max_length=19, unique=True)
 

@@ -63,22 +63,20 @@ class CNABViewSet(ViewSet):
 
         return result
 
-    def __create_stores_and_cnabs(self, cnabs):
+    def __create_stores_and_cnabs(self, user, cnabs):
         """
         Cria as lojas e cnabs
         """
 
         for cnab in cnabs:
-            serializer = StoreSerializer(data=cnab)
+            serializer = StoreSerializer(data=cnab, context={"user": user})
             if serializer.is_valid():
                 serializer.save()
 
-    def __to_representation(self, user):
+    def __to_representation(self):
         """
         Formata os dados de saída.
         """
-
-        print(user)
 
         results = []
         stores = Store.objects.all()
@@ -101,12 +99,9 @@ class CNABViewSet(ViewSet):
             data = self.__extract_data_from_line(line)
             cnabs.append(data)
 
-        self.__create_stores_and_cnabs(cnabs)
+        self.__create_stores_and_cnabs(request.user, cnabs)
 
         return Response(
-            {
-                "success": True,
-                "results": self.__to_representation(request.user)
-            },
+            {"success": True, "results": self.__to_representation()},
             status=status.HTTP_200_OK
         )
