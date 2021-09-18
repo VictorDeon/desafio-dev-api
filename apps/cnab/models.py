@@ -7,7 +7,7 @@ class Store(models.Model):
     Modelo da loja.
     """
 
-    store = models.CharField(max_length=19, unique=True)
+    title = models.CharField(max_length=19, unique=True)
 
     cpf = models.CharField(max_length=14)
 
