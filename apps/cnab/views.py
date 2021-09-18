@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.views import status
 from rest_framework.response import Response
 from shared.exception import GenericException
-from .models import CNAB
+from .models import CNAB, Store
 from .permissions import RetrieveLoggedPermission
 from .enum import TransactionType, TransactionSignal
 
@@ -59,9 +59,29 @@ class CNABViewSet(ViewSet):
             "store": line[62:].strip().replace("\n", "")
         }
 
-        CNAB.objects.create(**result)
-
         return result
+
+    def __create_stores_and_cnabs(self, results):
+        """
+        Cria as lojas e cnabs
+        """
+
+        for result in results:
+            store, created = Store.objects.get_or_create(
+                store=result['store'],
+                defaults={ "cpf": result['cpf'], "owner": result['owner'] }
+            )
+
+            CNAB.objects.create(
+                store=store,
+                transaction_type=result['transaction_type'],
+                transaction_signal=result['transaction_signal'],
+                date=result['date'],
+                value=result['value'],
+                card=result['card'],
+                time=result['time']
+            )
+
 
     @action(detail=False, methods=['post'], url_path="cnab", url_name="upload")
     def cnab(self, request, *args, **kwargs):
@@ -75,5 +95,7 @@ class CNABViewSet(ViewSet):
         for line in lines:
             data = self.__extract_data_from_line(line)
             results.append(data)
+
+        self.__create_stores_and_cnabs(results)
 
         return Response({ "success": True, "results": results }, status=status.HTTP_200_OK)

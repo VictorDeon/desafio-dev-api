@@ -2,7 +2,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from apps.accounts.models import User
-from ..models import CNAB
+from ..models import CNAB, Store
 
 
 class GetUserTestCase(APITestCase):
@@ -37,6 +37,7 @@ class GetUserTestCase(APITestCase):
 
         self.cnab.seek(0)
         self.cnab.close()
+        Store.objects.all().delete()
         CNAB.objects.all().delete()
         User.objects.all().delete()
         self.client.logout()
@@ -49,7 +50,9 @@ class GetUserTestCase(APITestCase):
         url = reverse('cnab-upload')
         self.client.force_authenticate(self.superuser)
         self.assertEqual(CNAB.objects.count(), 0)
+        self.assertEqual(Store.objects.count(), 0)
         response = self.client.post(url, data={ "file": self.cnab }, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['success'])
+        self.assertEqual(Store.objects.count(), 5)
         self.assertEqual(CNAB.objects.count(), len(response.data['results']))

@@ -2,16 +2,47 @@ from django.db import models
 from .enum import TransactionType
 
 
-class CNAB(models.Model):
+class Store(models.Model):
     """
-    Modelo de CNAB
+    Modelo da loja.
     """
+
+    store = models.CharField(max_length=19, unique=True)
 
     cpf = models.CharField(max_length=14)
 
     owner = models.CharField(max_length=14)
 
-    store = models.CharField(max_length=19)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        """
+        Representação da modelo como string.
+        """
+
+        return self.store
+
+    class Meta:
+        """
+        Informações adicionais do modelo.
+        """
+
+        db_table = "store"
+        ordering = ('-created_at',)
+
+class CNAB(models.Model):
+    """
+    Modelo de CNAB
+    """
+
+    store = models.ForeignKey(
+        Store,
+        verbose_name='Loja',
+        related_name="cnabs",
+        on_delete=models.CASCADE
+    )
 
     transaction_type = models.CharField(max_length=50, choices=TransactionType.choices)
 
