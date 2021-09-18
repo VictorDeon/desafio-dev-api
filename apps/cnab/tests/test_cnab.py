@@ -44,7 +44,7 @@ class GetUserTestCase(APITestCase):
 
     def test_get_cnab_by_admin_user(self):
         """
-        Administrador armazenar dados de CNAB
+        Administrador armazenar dados de CNAB.
         """
 
         url = reverse('cnab-upload')
@@ -54,5 +54,7 @@ class GetUserTestCase(APITestCase):
         response = self.client.post(url, data={ "file": self.cnab }, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['success'])
-        self.assertEqual(Store.objects.count(), 5)
-        self.assertEqual(CNAB.objects.count(), len(response.data['results']))
+        self.assertEqual(Store.objects.count(), len(response.data['results']))
+        self.assertEqual(CNAB.objects.count(), 21)
+
+        print(response.data)

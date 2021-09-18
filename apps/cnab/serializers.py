@@ -93,17 +93,20 @@ class StoreSerializer(serializers.Serializer):
         Formata os dados de saída.
         """
 
+        signal_map = {"+": 1, "-": -1}
+
         return {
             "title": instance.title,
             "cpf": instance.cpf,
             "owner": instance.owner,
+            "total": round(float(sum([cnab.value * signal_map[cnab.transaction_signal] for cnab in instance.cnabs.all()])), 2),
             "cnabs": [{
                 "transaction_type": cnab.transaction_type,
                 "transaction_signal": cnab.transaction_signal,
-                "date": cnab.date,
-                "value": cnab.value,
+                "date": cnab.date.strftime("%d/%m/%Y"),
+                "value": round(float(cnab.value), 2),
                 "card": cnab.card,
-                "time": cnab.time
+                "time": cnab.time.strftime("%H:%M:%S")
             } for cnab in instance.cnabs.all()]
         }
 

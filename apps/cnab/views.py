@@ -6,6 +6,7 @@ from shared.exception import GenericException
 from .permissions import RetrieveLoggedPermission
 from .enum import TransactionType, TransactionSignal
 from .serializers import StoreSerializer
+from .models import Store
 
 
 class CNABViewSet(ViewSet):
@@ -62,20 +63,30 @@ class CNABViewSet(ViewSet):
 
         return result
 
-    def __create_stores_and_cnabs(self, results):
+    def __create_stores_and_cnabs(self, cnabs):
         """
         Cria as lojas e cnabs
         """
 
-        data = []
-        for result in results:
-            serializer = StoreSerializer(data=result)
-
+        for cnab in cnabs:
+            serializer = StoreSerializer(data=cnab)
             if serializer.is_valid():
                 serializer.save()
-                data.append(serializer.data)
 
-        return data
+    def __to_representation(self, user):
+        """
+        Formata os dados de saída.
+        """
+
+        print(user)
+
+        results = []
+        stores = Store.objects.all()
+        for store in stores:
+            serializer = StoreSerializer()
+            results.append(serializer.to_representation(store))
+
+        return results
 
     @action(detail=False, methods=['post'], url_path="cnab", url_name="upload")
     def cnab(self, request, *args, **kwargs):
@@ -85,11 +96,17 @@ class CNABViewSet(ViewSet):
 
         lines = self.__open_file(request.data)
 
-        results = []
+        cnabs = []
         for line in lines:
             data = self.__extract_data_from_line(line)
-            results.append(data)
+            cnabs.append(data)
 
-        data = self.__create_stores_and_cnabs(results)
+        self.__create_stores_and_cnabs(cnabs)
 
-        return Response({ "success": True, "results": data }, status=status.HTTP_200_OK)
+        return Response(
+            {
+                "success": True,
+                "results": self.__to_representation(request.user)
+            },
+            status=status.HTTP_200_OK
+        )
