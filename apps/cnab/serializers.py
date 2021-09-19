@@ -4,7 +4,7 @@ from .models import CNAB, Store
 
 class StoreSerializer(serializers.Serializer):
     """
-    Serialização dos dados das lojas e seus CNABs
+    Serialização dos dados das lojas e seus CNABs.
     """
 
     transaction_type = serializers.CharField(

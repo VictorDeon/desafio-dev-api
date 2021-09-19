@@ -22,8 +22,20 @@ class CNABViewSet(ViewSet):
         Abre o arquivo de forma async.
         """
 
+        if data['file'].content_type != "text/plain":
+            raise GenericException(
+                "Formato de arquivo inválido, deve ser do tipo text/plain.",
+                status_code=status.HTTP_400_BAD_REQUEST
+            )
+
         lines = []
         for line in data['file'].readlines():
+            if len(line.decode()) != 81:
+                raise GenericException(
+                    "O tamanho de cada linha do cnab deve conter exatamente 81 caracteres.",
+                    status_code=status.HTTP_400_BAD_REQUEST
+                )
+
             lines.append(line.decode())
 
         data['file'].close()
@@ -47,11 +59,9 @@ class CNABViewSet(ViewSet):
             "9": {"type": TransactionType.RENT.value, "signal": TransactionSignal.RENT.value},
         }
 
-        transaction = line[0:1]
-
         result = {
-            "transaction_type": transaction_map[transaction]["type"],
-            "transaction_signal": transaction_map[transaction]["signal"],
+            "transaction_type": transaction_map[line[0:1]]["type"],
+            "transaction_signal": transaction_map[line[0:1]]["signal"],
             "date": f"{line[1:5]}-{line[5:7]}-{line[7:9]}",
             "value": round(float(line[9:19]) / 100, 2),
             "cpf": f"{line[19:22]}.{line[22:25]}.{line[25:28]}-{line[28:30]}",
