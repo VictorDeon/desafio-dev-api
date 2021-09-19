@@ -50,7 +50,7 @@ class GetUserTestCase(APITestCase):
         self.client.force_authenticate(self.user)
         self.assertEqual(CNAB.objects.count(), 0)
         self.assertEqual(Store.objects.count(), 0)
-        response = self.client.post(url, data={ "file": self.cnab }, format="multipart")
+        response = self.client.post(url, data={"file": self.cnab}, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(response.data['success'])
         self.assertEqual(Store.objects.last().user, self.user)
@@ -85,7 +85,7 @@ class GetUserTestCase(APITestCase):
         url = reverse('cnab-upload')
         self.assertEqual(CNAB.objects.count(), 0)
         self.assertEqual(Store.objects.count(), 0)
-        response = self.client.post(url, data={ "file": self.cnab }, format="multipart")
+        response = self.client.post(url, data={"file": self.cnab}, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual(response.data.get('detail'), "Usuário precisa esta autenticado para realizar essa ação!")
         self.assertEqual(CNAB.objects.count(), 0)
@@ -102,7 +102,7 @@ class GetUserTestCase(APITestCase):
         url = reverse('cnab-upload')
         self.assertEqual(CNAB.objects.count(), 0)
         self.assertEqual(Store.objects.count(), 0)
-        response = self.client.post(url, data={ "file": self.cnab }, format="multipart")
+        response = self.client.post(url, data={"file": self.cnab}, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data.get('detail'), "Formato de arquivo inválido, deve ser do tipo text/plain.")
         self.assertEqual(CNAB.objects.count(), 0)
@@ -119,35 +119,11 @@ class GetUserTestCase(APITestCase):
         url = reverse('cnab-upload')
         self.assertEqual(CNAB.objects.count(), 0)
         self.assertEqual(Store.objects.count(), 0)
-        response = self.client.post(url, data={ "file": self.cnab }, format="multipart")
+        response = self.client.post(url, data={"file": self.cnab}, format="multipart")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data.get('detail'), "O tamanho de cada linha do cnab deve conter exatamente 81 caracteres.")
         self.assertEqual(CNAB.objects.count(), 0)
         self.assertEqual(Store.objects.count(), 0)
-
-    def test_cnab_empty_transaction_type(self):
-        """
-        Transcation Type não pode ser vazio.
-        """
-
-        cnab = {"transaction_type": ""}
-        serializer = StoreSerializer(data=cnab, context={"user": self.user})
-        self.assertFalse(serializer.is_valid())
-        self.assertRaises(ValidationError, serializer.is_valid, raise_exception=True)
-        if not serializer.is_valid():
-            self.assertEqual(serializer.errors['transaction_type'][0], "O tipo de transação não pode está em branco.")
-
-    def test_cnab_required_transaction_type(self):
-        """
-        Transcation Type é obrigatório.
-        """
-
-        cnab = {"transaction_signal": TransactionSignal.FINANCING.value}
-        serializer = StoreSerializer(data=cnab, context={"user": self.user})
-        self.assertFalse(serializer.is_valid())
-        self.assertRaises(ValidationError, serializer.is_valid, raise_exception=True)
-        if not serializer.is_valid():
-            self.assertEqual(serializer.errors['transaction_type'][0], "O tipo de transação é obrigatório")
 
     def error_serializer_tests(self, field, msg):
         """
@@ -159,7 +135,7 @@ class GetUserTestCase(APITestCase):
         self.assertFalse(serializer.is_valid())
         self.assertRaises(ValidationError, serializer.is_valid, raise_exception=True)
         if not serializer.is_valid():
-            self.assertEqual(serializer.errors[f"{field}"][0],  msg)
+            self.assertEqual(serializer.errors[f"{field}"][0], msg)
 
     def test_cnab_empty_transaction_type(self):
         """
@@ -188,13 +164,6 @@ class GetUserTestCase(APITestCase):
         """
 
         self.error_serializer_tests("date", "A data da transação não pode está em branco.")
-
-    def test_cnab_empty_value(self):
-        """
-        O sinal da transação não pode ser vazio.
-        """
-
-        self.error_serializer_tests("value", "O valor da movimentação não pode está em branco.")
 
     def test_cnab_empty_cpf(self):
         """

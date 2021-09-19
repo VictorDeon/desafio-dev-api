@@ -39,6 +39,7 @@ class Store(models.Model):
         db_table = "store"
         ordering = ('-created_at',)
 
+
 class CNAB(models.Model):
     """
     Modelo de CNAB
