@@ -62,4 +62,12 @@ flake8:
 
 test:
 	# Roda todos os testes
-	docker-compose exec web python3 manage.py test ${path} --keepdb
+	docker-compose exec web coverage run --source='.' manage.py test ${path} --keepdb
+
+report:
+	# Gera o relatório de testes
+	docker-compose exec web coverage report
+
+html:
+	# Gera o relatório em html
+	docker-compose exec web coverage html
