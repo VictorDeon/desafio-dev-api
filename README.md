@@ -47,6 +47,13 @@ você consegue se autenticar no sistema.
 make superuser
 ```
 
+Para acessar a documentação do projeto é só acessar a URL que será mostrada ao subir o servidor,
+lá tem a documentação de todos os endpoints e autenticação.
+
+```sh
+http://0.0.0.0:8000/
+```
+
 ## Produção
 
 Se quiser subir a API em produção pode inserir a imagem em na AWS Docker Registry e utiliza-la em um orquestrador de container

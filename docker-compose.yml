@@ -6,10 +6,8 @@ services:
     volumes:
       - .ignore/postgres:/var/lib/postgresql/data
       - .ignore/backup:/backup
-    environment:
-      - POSTGRES_DB=bycoders-db
-      - POSTGRES_USER=bycoders
-      - POSTGRES_PASSWORD=bycoders
+    env_file:
+      - .env
     ports:
       - "5434:5432"
 

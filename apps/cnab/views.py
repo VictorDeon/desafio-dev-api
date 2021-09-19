@@ -23,11 +23,28 @@ from .models import Store
             name="CNAB",
             fields={"file": serializers.FileField(label="CNAB", help_text="Arquivo de CNAB.")}
         ),
-        responses={200: OpenApiResponse(response=StoreSerializer, description="OK")},
+        responses={200: OpenApiResponse(response=inline_serializer(
+            name="Response",
+            fields={
+                "title": serializers.CharField(label="Loja",help_text="Nome da loja"),
+                "cpf": serializers.CharField(label="CPF", help_text="CPF do beneficiário"),
+                "owner": serializers.CharField(label="Nome", help_text="Nome do representante da loja"),
+                "total": serializers.CharField(label="Total", help_text="Totalizador do saldo em conta"),
+                "cnabs": inline_serializer(
+                    name="CNABs",
+                    fields={
+                        "transaction_type": serializers.CharField(label="Tipo", help_text="Tipos de transações. Ex: Aluguel"),
+                        "transaction_signal": serializers.CharField(label="Sinal", help_text="Sinal de operação da transação. Ex: + ou -"),
+                        "date": serializers.CharField(label="Data", help_text="Data da ocorrência da transação"),
+                        "value": serializers.CharField(label="Valor", help_text="Valor da movimentação."),
+                        "card": serializers.CharField(label="Cartão", help_text="Cartão utilizado na transação"),
+                        "time": serializers.CharField(label="Hora da ocorrência", help_text="Hora da ocorrência atendendo ao fuso de UTC-3")
+                    }
+                )
+            }
+        ), description="OK")},
         examples=[
-            OpenApiExample("Request Ex", value={
-                "file": "..."
-            }, request_only=True),
+            OpenApiExample("Request Ex", value={"file": "..."}, request_only=True),
             OpenApiExample("Exemplo", value=[
                 {
                     "title": "LOJA DO Ó - FILIAL",
