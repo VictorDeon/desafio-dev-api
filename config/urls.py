@@ -13,8 +13,7 @@ urlpatterns = [
     path('schema/', ExcludedSpectacularYAMLAPIView.as_view(), name='schema'),
     path('auth/', TokenView.as_view(), name='token_obtain_pair'),
     path('auth/refresh/', AccessTokenRefreshView.as_view(), name='token_refresh'),
-    path('cnab', include('apps.cnab.urls')),
-    path('users/', include('apps.accounts.urls'))
+    path('cnab', include('apps.cnab.urls'))
 ]
 
 if settings.DEBUG:

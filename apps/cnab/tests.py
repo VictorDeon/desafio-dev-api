@@ -3,10 +3,10 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.exceptions import ValidationError
 from apps.accounts.models import User
-from ..models import CNAB, Store
-from ..views import CNABViewSet
-from ..enum import TransactionType, TransactionSignal
-from ..serializers import StoreSerializer
+from .models import CNAB, Store
+from .views import CNABViewSet
+from .enum import TransactionType, TransactionSignal
+from .serializers import StoreSerializer
 
 
 class GetUserTestCase(APITestCase):
@@ -26,7 +26,7 @@ class GetUserTestCase(APITestCase):
             password='django1234'
         )
 
-        self.cnab = open("./apps/cnab/tests/CNAB.txt", "rb")
+        self.cnab = open("./apps/cnab/mocks/CNAB.txt", "rb")
 
     def tearDown(self):
         """
@@ -97,7 +97,7 @@ class GetUserTestCase(APITestCase):
         """
 
         self.cnab.close()
-        self.cnab = open("./apps/cnab/tests/gateways.png", "rb")
+        self.cnab = open("./apps/cnab/mocks/gateways.png", "rb")
         self.client.force_authenticate(self.user)
         url = reverse('cnab-upload')
         self.assertEqual(CNAB.objects.count(), 0)
@@ -114,7 +114,7 @@ class GetUserTestCase(APITestCase):
         """
 
         self.cnab.close()
-        self.cnab = open("./apps/cnab/tests/CNAB_wrong.txt", "rb")
+        self.cnab = open("./apps/cnab/mocks/CNAB_wrong.txt", "rb")
         self.client.force_authenticate(self.user)
         url = reverse('cnab-upload')
         self.assertEqual(CNAB.objects.count(), 0)

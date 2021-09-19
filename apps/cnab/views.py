@@ -15,6 +15,7 @@ class CNABViewSet(ViewSet):
     """
 
     permission_classes = (RetrieveLoggedPermission,)
+    serializer_class = StoreSerializer
 
     def __open_file(self, data):
         """
