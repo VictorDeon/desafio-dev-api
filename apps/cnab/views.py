@@ -42,9 +42,16 @@ from .models import Store
                     }
                 )
             }
-        ), description="OK")},
+        ), description="OK"),
+        400: OpenApiResponse(response=inline_serializer(
+            name="BAD REQUEST",
+            fields={"detail": serializers.CharField(label="Erro", help_text="Mensagem de erro.")}
+        ), description="BAD REQUEST")},
         examples=[
             OpenApiExample("Request Ex", value={"file": "..."}, request_only=True),
+            OpenApiExample("400", status_codes=["400"], value={
+                "detail": "Formato de arquivo inválido, deve ser do tipo text/plain."
+            }, response_only=True),
             OpenApiExample("Exemplo", value=[
                 {
                     "title": "LOJA DO Ó - FILIAL",
