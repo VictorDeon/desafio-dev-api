@@ -31,4 +31,4 @@ python3 manage.py makemigrations
 python3 manage.py migrate
 
 echo "Rodando o servidor"
-gunicorn config.wsgi --bind 0.0.0.0:8000 --reload --graceful-timeout=900 --timeout=900 --workers 5
+gunicorn config.wsgi --bind 0.0.0.0:8000 --reload --graceful-timeout=900 --timeout=900 --workers 1
