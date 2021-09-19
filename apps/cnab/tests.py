@@ -9,7 +9,7 @@ from .enum import TransactionType, TransactionSignal
 from .serializers import StoreSerializer
 
 
-class GetUserTestCase(APITestCase):
+class CNABTestCase(APITestCase):
     """
     Testes unitários para verificar o comportamento
     de extração dos dados do CNAB

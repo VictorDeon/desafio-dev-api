@@ -1,14 +1,110 @@
 from rest_framework.viewsets import ViewSet
+from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.views import status
 from rest_framework.response import Response
 from shared.exception import GenericException
+from drf_spectacular.utils import (
+    extend_schema_view, extend_schema, inline_serializer,
+    OpenApiResponse, OpenApiExample
+)
 from .permissions import RetrieveLoggedPermission
 from .enum import TransactionType, TransactionSignal
 from .serializers import StoreSerializer
 from .models import Store
 
 
+@extend_schema_view(
+    cnab=extend_schema(
+        operation_id="Upload do CNAB",
+        description="Endpoint responsável por realizar o upload do CNAB e armazenar seus dados no banco de dados.",
+        tags=["CNAB"],
+        request=inline_serializer(
+            name="CNAB",
+            fields={"file": serializers.FileField(label="CNAB", help_text="Arquivo de CNAB.")}
+        ),
+        responses={200: OpenApiResponse(response=StoreSerializer, description="OK")},
+        examples=[
+            OpenApiExample("Request Ex", value={
+                "file": "..."
+            }, request_only=True),
+            OpenApiExample("Exemplo", value=[
+                {
+                    "title": "LOJA DO Ó - FILIAL",
+                    "cpf": "556.418.150-63",
+                    "owner": "MARIA JOSEFINA",
+                    "total": 152.32,
+                    "cnabs": [
+                        {
+                            "transaction_type": "Crédito",
+                            "transaction_signal": "+",
+                            "date": "01/03/2019",
+                            "value": 152.32,
+                            "card": "1234****6678",
+                            "time": "10:00:00"
+                        }
+                    ]
+                },
+                {
+                    "title": "MERCEARIA 3 IRMÃOS",
+                    "cpf": "232.702.980-56",
+                    "owner": "JOSÉ COSTA",
+                    "total": -7023.0,
+                    "cnabs": [
+                        {
+                            "transaction_type": "Boleto",
+                            "transaction_signal": "-",
+                            "date": "01/03/2019",
+                            "value": 102.0,
+                            "card": "8473****1231",
+                            "time": "23:12:33"
+                        },
+                        {
+                            "transaction_type": "Financiamento",
+                            "transaction_signal": "-",
+                            "date": "01/03/2019",
+                            "value": 602.0,
+                            "card": "6777****1313",
+                            "time": "17:27:12"
+                        },
+                        {
+                            "transaction_type": "Financiamento",
+                            "transaction_signal": "-",
+                            "date": "01/03/2019",
+                            "value": 6102.0,
+                            "card": "6777****1313",
+                            "time": "17:27:12"
+                        },
+                        {
+                            "transaction_type": "Financiamento",
+                            "transaction_signal": "-",
+                            "date": "01/03/2019",
+                            "value": 103.0,
+                            "card": "6777****1313",
+                            "time": "17:27:12"
+                        },
+                        {
+                            "transaction_type": "Boleto",
+                            "transaction_signal": "-",
+                            "date": "01/03/2019",
+                            "value": 5.0,
+                            "card": "7677****8778",
+                            "time": "14:18:08"
+                        },
+                        {
+                            "transaction_type": "Boleto",
+                            "transaction_signal": "-",
+                            "date": "01/03/2019",
+                            "value": 109.0,
+                            "card": "8723****9987",
+                            "time": "12:33:33"
+                        }
+                    ]
+                },
+            ], response_only=True, status_codes=["200"])
+        ]
+    )
+)
 class CNABViewSet(ViewSet):
     """
     View set do modelo de Resultado de simulação
@@ -96,7 +192,7 @@ class CNABViewSet(ViewSet):
 
         return results
 
-    @action(detail=False, methods=['post'], url_path="cnab", url_name="upload")
+    @action(detail=False, methods=['post'], url_path="upload", url_name="upload")
     def cnab(self, request, *args, **kwargs):
         """
         Extrai os dados do CNAB e armazena no banco

@@ -62,7 +62,7 @@ flake8:
 
 test:
 	# Roda todos os testes
-	docker-compose exec web coverage run --source='.' manage.py test ${path} --keepdb
+	docker-compose exec web coverage run --source='.' manage.py test apps.cnab.tests --keepdb
 
 report:
 	# Gera o relatório de testes
