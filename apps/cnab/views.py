@@ -26,7 +26,7 @@ from .models import Store
         responses={200: OpenApiResponse(response=inline_serializer(
             name="Response",
             fields={
-                "title": serializers.CharField(label="Loja",help_text="Nome da loja"),
+                "title": serializers.CharField(label="Loja", help_text="Nome da loja"),
                 "cpf": serializers.CharField(label="CPF", help_text="CPF do beneficiário"),
                 "owner": serializers.CharField(label="Nome", help_text="Nome do representante da loja"),
                 "total": serializers.CharField(label="Total", help_text="Totalizador do saldo em conta"),

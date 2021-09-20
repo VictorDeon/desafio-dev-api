@@ -124,14 +124,14 @@ class StoreSerializer(serializers.Serializer):
             }
         )
 
-        CNAB.objects.create(
+        CNAB.objects.get_or_create(
             store=store,
             transaction_type=validated_data['transaction_type'],
             transaction_signal=validated_data['transaction_signal'],
             date=validated_data['date'],
+            time=validated_data['time'],
             value=validated_data['value'],
-            card=validated_data['card'],
-            time=validated_data['time']
+            card=validated_data['card']
         )
 
         return store
