@@ -1,0 +1,75 @@
+name: Run lint
+
+on:
+    push:
+        branches:
+          - "main"
+    pull_request:
+        branches:
+          - "main"
+
+jobs:
+  build:
+    name: Run tests, flake8
+    runs-on: ubuntu-20.04
+    env:
+      ENVIRONMENT: development
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - name: Copy code from master
+      uses: actions/checkout@v2
+
+    - name: Setup python 3.6
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.6
+
+    - name: Install dependecies
+      run: |
+        sudo apt-get update
+
+    - name: Restore cache
+      uses: actions/cache@v2
+      with:
+        path: ./venv
+        key: v1-dependencies-${{ hashFiles('requirements.txt') }}
+        restore-keys: v1-dependencies-
+
+    - name: Install packages
+      run: |
+        python -m pip install --upgrade pip
+        python3 -m venv venv
+        . venv/bin/activate
+        pip install -r requirements.txt
+
+    - name: Lint with flake8
+      run: |
+        . venv/bin/activate
+        flake8 . --count
+
+    - name: Run tests
+      env:
+        POSTGRES_HOST: localhost
+        POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+        POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        POSTGRES_PORT: 5432
+      run: |
+        . venv/bin/activate
+        python3 manage.py test
