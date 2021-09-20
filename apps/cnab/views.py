@@ -139,7 +139,7 @@ class CNABViewSet(ViewSet):
 
     def __open_file(self, data):
         """
-        Abre o arquivo de forma async.
+        Abre o arquivo de CNAB e decodifica as suas linhas.
         """
 
         if data['file'].content_type != "text/plain":

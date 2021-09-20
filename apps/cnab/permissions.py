@@ -6,7 +6,7 @@ from shared.exception import GenericException
 
 class RetrieveLoggedPermission(BasePermission):
     """
-    Permissão para pegar os dados de um representante autenticado.
+    Permissão para pegar os dados de um usuário autenticado.
     """
 
     def has_permission(self, request, view):

@@ -4,7 +4,7 @@ from rest_framework.views import status
 
 class GenericException(APIException):
     """
-    Exceção genérica da livre.
+    Exceção genérica.
     """
 
     status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
