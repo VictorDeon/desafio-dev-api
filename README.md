@@ -54,7 +54,11 @@ lá tem a documentação de todos os endpoints e autenticação.
 http://0.0.0.0:8000/
 ```
 
+No **github actions** é possível visualizar o flake8 e os testes sendo rodados.
+
 ## Produção
+
+Criar o github actions para o deploy continuo em algum servidor. Ex: AWS
 
 Se quiser subir a API em produção pode inserir a imagem em na AWS Docker Registry e utiliza-la em um orquestrador de container
 kubernetes EKS da AWS, ou subir em uma função lambda da AWS por meio de um serverless. Já o frontend é só subir na AWS Amplify.
